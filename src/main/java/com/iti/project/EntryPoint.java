@@ -55,20 +55,27 @@ public class EntryPoint extends Application {
         this.sceneOnePane.setTop(logInField);
         this.sceneOnePane.setBottom(loginButton);
 
-        this.button1 = new Button("1");
-        this.button2 = new Button("2");
-        this.button3 = new Button("3");
-        this.button4 = new Button("4");
-        this.button5 = new Button("5");
-        this.button6 = new Button("6");
-        this.button7 = new Button("7");
-        this.button8 = new Button("8");
-        this.button9 = new Button("9");
+        this.button1 = new Button("");
+        this.button1.setId("0");
+        this.button2 = new Button("");
+        this.button2.setId("1");
+        this.button3 = new Button("");
+        this.button3.setId("2");
+        this.button4 = new Button("");
+        this.button4.setId("3");
+        this.button5 = new Button("");
+        this.button5.setId("4");
+        this.button6 = new Button("");
+        this.button6.setId("5");
+        this.button7 = new Button("");
+        this.button7.setId("6");
+        this.button8 = new Button("");
+        this.button8.setId("7");
+        this.button9 = new Button("");
+        this.button9.setId("8");
         this.playButton = new Button("Play Opponent");
         this.buttonsArray = new Button[]{button1, button2, button3, button4, button5, button6, button7, button8, button9};
-        for(Button button : buttonsArray){
-            button.setDisable(true);
-        }
+
         this.textField = new TextField();
 
         this.sceneTwoPane = new BorderPane();
@@ -107,18 +114,19 @@ public class EntryPoint extends Application {
         this.gameClient = new GameClient(this.textField, this.buttonsArray, sceneTwo, usersList);
 
         // To ensure program terminates when exit icon (x) is pressed
-        window.setOnCloseRequest((e)->System.exit(0));
+        window.setOnCloseRequest((e)-> {
+            System.exit(0);
+        });
 
         this.loginButton.setOnAction(e->{
             gameClient.login(logInField.getText());
         });
 
-        int i = 1;
         for(Button button : this.buttonsArray){
-            button.setText(String.valueOf(i));
-            i++;
             button.setOnAction((e)->{
-                gameClient.sendMoveToServer(button.getText());
+                if(gameClient.getMyTurn() && button.getText().equals("")){
+                    gameClient.sendMoveToServer(button.getId(), gameClient.getSymbol());
+                }
             });
         }
 
